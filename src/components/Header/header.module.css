@@ -1,0 +1,10 @@
+header{
+    padding: var(--spacing-small);
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+h2{
+    font-size: var(--font-size-medium);
+    letter-spacing: 1.2px;
+    text-align: center;
+}

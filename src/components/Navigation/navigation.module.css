@@ -1,0 +1,46 @@
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 86px;
+}
+
+ul{
+    list-style: none;
+    text-decoration: none;
+    display: flex;
+    gap: var(--spacing-large);
+    text-decoration-line: none;
+}
+
+li{
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
+.logoImg > a >img{
+    max-width: 76px;
+}
+
+a{
+    color: var(--color-text);
+    letter-spacing: 1.2px;
+}
+
+.btnCreate{
+    width: 100%;
+    min-width: 180px;
+    padding: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: var(--color-yellow);
+    color: var(--color-surface);
+    text-decoration: none;
+    letter-spacing: 0;
+    transition: transform 0.3s ease;
+}
+
+.btnCreate:hover{
+    text-decoration: none;
+    transform: scale(1.2);
+}

@@ -1,0 +1,36 @@
+footer{
+    background-color: var(--color-primary);
+    margin: 0;
+    padding: 0;
+}
+.copy > p {
+    text-align: center;
+    padding: var(--spacing-large);
+}
+
+.colorPrimary, .copy> p, .footerAdress> p{
+    color: var(--color-surface);
+}
+
+.footerAdress{
+    max-width: 250px;
+}
+.footerAdress >a> img{
+    width: 76px;
+}
+
+.footerAdress > p{
+    font-size: var(--font-size-small);
+}
+.footerInfo{
+    display: flex;
+    justify-content: space-around;
+    padding: var(--spacing-large);
+}
+.links > ul{
+    display: block;
+}
+
+.links > ul > li{
+    margin-top: 16px;
+}
