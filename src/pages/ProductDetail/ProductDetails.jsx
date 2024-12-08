@@ -33,29 +33,38 @@ function ProductDetail() {
         fetchCategories();
     }, []);
 
-    //busca dados se for edit
     useEffect(() => {
+        fetchProduct();
+    }, [id, isCreating]);
+
+    //busca dados se for edit
+    const fetchProduct = async () => {
         if (!isCreating) {
-            const fetchProduct = async () => {
+            const localData = localStorage.getItem("products");
+            let products = localData ? JSON.parse(localData) : [];
+
+            const localProduct = products.find((item) => item.id === parseInt(id));
+
+            if (localProduct) {
+                setProduct(localProduct);
+            } else {
                 try {
                     const response = await axios.get(`https://fakestoreapi.com/products/${id}`);
-                    console.log(response)
                     setProduct(response.data);
-                    console.log(product)
                 } catch (error) {
                     console.error("Erro ao carregar os dados do produto:", error);
                 }
-            };
-            fetchProduct();
+            }
+        } else {
+            setProduct({
+                title: "",
+                description: "",
+                price: "",
+                category: "",
+                image: "",
+            });
         }
-        setProduct({
-            title: "",
-            description: "",
-            price: "",
-            category: "",
-            image: "",
-        })
-    }, [id, isCreating]);
+    };
 
     //atualiza o produto
     const handleChange = (event) => {
@@ -67,11 +76,21 @@ function ProductDetail() {
     };
 
     const handleDelete = async () => {
+        
+        const localData = localStorage.getItem("products");
+        if (localData) {
+            const products = JSON.parse(localData);
+            const atualizaProducts = products.filter((item) => item.id !== parseInt(id));
+            localStorage.setItem("products", JSON.stringify(atualizaProducts));
+            console.log("Produto removido da Local Storage!");
+        } else {
+            console.log("Produto não encontrado no Local Storage!");
+        }
         try {
-                const response = await axios.delete(`https://fakestoreapi.com/products/${id}`);
-                console.log("Produto Deletado: ", response);
-                alert("Produto deletado com sucesso!");
-                navigate("/products")
+            const response = await axios.delete(`https://fakestoreapi.com/products/${id}`);
+            console.log("Produto Deletado: ", response);
+            alert("Produto deletado com sucesso!");
+            navigate("/products");
         } catch (error) {
             console.error("Erro ao deletar o produto:", error);
         }
@@ -80,20 +99,42 @@ function ProductDetail() {
     //cria um produto
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            if (isCreating) {
+
+        const localData = localStorage.getItem("products");
+        let products = localData ? JSON.parse(localData) : [];
+
+        if (isCreating) {
+            const novoProduct = { ...product, id: Date.now() };
+            products.push(novoProduct);
+            localStorage.setItem("products", JSON.stringify(products));
+            console.log("Adicionado no Local Storage:", novoProduct);
+
+            try {
                 const response = await axios.post("https://fakestoreapi.com/products", product);
-                console.log("Produto Criado: ", response);
+                console.log("Produto criado:", response);
                 alert("Produto criado com sucesso!");
-            } else {
-                const response = await axios.put(`https://fakestoreapi.com/products/${id}`, product);
-                console.log("Produto atualizado: ", response);
-                alert("Produto atualizado com sucesso!");
+                navigate("/products");
+            } catch (error) {
+                console.error("Erro ao criar produto:", error);
             }
-        } catch (error) {
-            console.error("Erro ao salvar/editar produto:", error);
+        } else {
+            products = products.map((product) =>
+                product.id === parseInt(id) ? { ...product, ...product } : product
+            );
+            localStorage.setItem("products", JSON.stringify(products));
+            console.log("Produto atualizado no Local Storage:", product);
+
+            try {
+                const response = await axios.put(`https://fakestoreapi.com/products/${id}`, product);
+                console.log("Produto atualizado:", response);
+                alert("Produto atualizado com sucesso!");
+                navigate("/products");
+            } catch (error) {
+                console.error("Erro ao atualizar produto:", error);
+            }
         }
     };
+
 
     return (
 
@@ -104,9 +145,6 @@ function ProductDetail() {
                     <img src={product.image === '' ? '' : product.image} alt={product.title} />
                 </div>
                 <div className={styles.rigth}>
-                    {/* <label> */}
-                    {/* Nome do Produto: */}
-                    {/* </label> */}
                     <input
                         type="text"
                         placeholder="Nome do Produto"
@@ -115,9 +153,6 @@ function ProductDetail() {
                         onChange={handleChange}
                         required
                     />
-                    {/* <label> */}
-                    {/* Descrição: */}
-                    {/* </label> */}
                     <textarea
                         placeholder="Descrição do Produto..."
                         name="description"
@@ -125,9 +160,6 @@ function ProductDetail() {
                         onChange={handleChange}
                         required
                     />
-                    {/* <label> */}
-                    {/* Categoria: */}
-                    {/* </label> */}
                     <select
                         id="exampleSelect"
                         name="category"
@@ -142,9 +174,6 @@ function ProductDetail() {
                             ))
                         }
                     </select>
-                    {/* <label> */}
-                    {/* Preço: */}
-                    {/* </label> */}
                     <input
                         placeholder="Valor do Produto"
                         type="text"
@@ -153,9 +182,6 @@ function ProductDetail() {
                         onChange={handleChange}
                         required
                     />
-                    {/* <label> */}
-                    {/* Imagem (URL): */}
-                    {/* </label> */}
                     <input
                         placeholder="Informe a URL da Imagem"
                         type="text"
@@ -165,7 +191,7 @@ function ProductDetail() {
                         required
                     />
                     <div className={styles.btnContent}>
-                        { !isCreating ? <button type="button" className={styles.deleteButton} title="Excluir" onClick={handleDelete}><CiTrash size={18} /></button> : <></>}
+                        {!isCreating ? <button type="button" className={styles.deleteButton} title="Excluir" onClick={handleDelete}><CiTrash size={18} /></button> : <></>}
                         <button type="button" className={styles.cancelButton} onClick={() => navigate("/products")}>Cancelar</button>
                         <button type="submit" className={styles.saveButton} >Salvar</button>
                     </div>

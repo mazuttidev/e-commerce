@@ -1,25 +1,37 @@
 import React, { useEffect } from "react";
 import styles from "./productCard.module.css";
 import { useNavigate } from "react-router-dom";
+import { CiEdit, CiTrash } from "react-icons/ci";
 import axios from "axios";
 
-function ProductCard({ products, isGridLayout}) {
+function ProductCard({ products, isGridLayout, onProductUpdate }) {
     const navigate = useNavigate();
 
-    const handleEdit = () => {
-        navigate(`/products/edit/${products.id}`);
+    const handleEdit = (id) => {
+        navigate(`/products/edit/${id}`);
     };
 
-    const handleDelete = async () => {
+    const handleDelete = async (id) => {
+        const localData = localStorage.getItem("products");
+        if (localData) {
+            const products = JSON.parse(localData);
+            const updatedProducts = products.filter((item) => item.id !== parseInt(id));
+            localStorage.setItem("products", JSON.stringify(updatedProducts));
+            onProductUpdate(updatedProducts);
+            console.log("Produto removido da Local Storage!");
+        } else {
+            console.log("Produto não encontrado no Local Storage!");
+        }
+
         try {
-            const response = await axios.delete(`https://fakestoreapi.com/products/${products.id}`);
+            const response = await axios.delete(`https://fakestoreapi.com/products/${id}`);
             console.log("Produto Deletado: ", response);
             alert("Produto deletado com sucesso!");
-            navigate("/products")
         } catch (error) {
             console.error("Erro ao deletar o produto:", error);
         }
-    }
+    };
+
     return (
 
         (isGridLayout) ? (
@@ -27,12 +39,12 @@ function ProductCard({ products, isGridLayout}) {
             <>
                 {
                     products.map(element => (
-                        <div className={styles.myCard}>
+                        <div key={element.id} className={styles.myCard}>
                             <div className={styles.imageContent}>
                                 <img src={element.image} alt={element.title} />
                                 <div className={styles.bntGroup}>
-                                    <button type="button" className={styles.deleteButton} onClick={handleDelete}>Excluir Item</button>
-                                    <button type="button" className={styles.editButton} onClick={handleEdit}>Editar Item</button>
+                                    <button type="button" className={styles.deleteButton} onClick={() => handleDelete(element.id)}>Excluir Item</button>
+                                    <button type="button" className={styles.editButton} onClick={() => handleEdit(element.id)}>Editar Item</button>
                                 </div>
                             </div>
                             <div className={styles.productInfo}>
@@ -54,34 +66,34 @@ function ProductCard({ products, isGridLayout}) {
                     <table style={{ width: "100%", borderCollapse: "collapse" }}>
                         <thead>
                             <tr>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Product ID</th>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Image</th>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Name</th>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Description</th>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Price</th>
-                                <th style={{ border: "1px solid #ccc", padding: "8px" }}>Is Grid Layout</th>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Imagem</th>
+                                <th>Descrição</th>
+                                <th>Preço</th>
+                                <th>Excluir</th>
                             </tr>
                         </thead>
                         <tbody>
                             {products.map((product) => (
-                                <tr key={product.productId}>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                                        {product.productId}
+                                <tr key={product.id}>
+                                    <td className={styles.alCenter}>
+                                        <CiEdit color="blue" size={32} onClick={() => handleEdit(product.id)} className={styles.icon} />
                                     </td>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                                        <img src={product.imageUrl} alt={product.productName} width="50" />
+                                    <td>
+                                        {product.id} - {product.title}
                                     </td>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                                        {product.productName}
+                                    <td className={styles.alCenter}>
+                                        <img src={product.image} alt={product.title} width="50" />
                                     </td>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                                    <td>
                                         {product.description}
                                     </td>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                                        {product.price}
+                                    <td className={styles.price}>
+                                        R$ {product.price}
                                     </td>
-                                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
-                                        {product.isGridLayout ? "Yes" : "No"}
+                                    <td className={styles.alCenter}>
+                                        <CiTrash color="rgba(139, 27, 33)" size={32} onClick={() => handleDelete(product.id)} className={styles.icon} />
                                     </td>
                                 </tr>
                             ))}

@@ -1,32 +1,34 @@
-.container{
+.container {
     padding: var(--spacing-large) var(--spacing-extra-large);
 }
 
-.heroSession{
+.heroSession,
+.heroSessionHover {
     position: relative;
 }
 
-.heroSession > img{
+.heroSession>img {
     max-width: 100%;
     border: 1.5px solid var(--color-shadow);
-    filter: blur(5px) grayscale(1.0);
+    filter: blur(10px) grayscale(1.0);
 }
-.heroSession > img:hover{
+
+.heroSessionHover>img {
+    max-width: 100%;
     filter: blur(0) grayscale(0);
-    transition:  var(--transition-ease) .5s;
-    position: relative;
+    transition: var(--transition-ease) .5s;
 }
 
-.textInfo{
-    position: absolute; 
-    top: 26%; 
-    left: 25%; 
-    transform: translate(-50%, -50%); 
+.textInfo {
+    position: absolute;
+    top: 26%;
+    left: 25%;
+    transform: translate(-50%, -50%);
     text-align: left;
-    color: white; 
+    color: white;
 }
 
-.textInfo > h1{
+.textInfo>h1 {
     font-size: 32px;
     margin: 2px 0;
     color: var(--color-red);
@@ -34,22 +36,27 @@
     text-transform: uppercase;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
 }
-.textInfo > span{
+
+.fontSmall{
+    font-size: 12px !important;
+}
+
+.textInfo>span {
     text-transform: uppercase;
     color: var(--color-yellow);
     font-size: 20px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-.carosselCards{
+.carosselCards {
     margin: 84px;
 }
 
-.headerCarosselCards{
+.headerCarosselCards {
     display: flex;
     justify-content: space-between;
 }
 
-.headerCarosselCards > h4{
+.headerCarosselCards>h4 {
     font-size: var(--font-size-medium);
 }

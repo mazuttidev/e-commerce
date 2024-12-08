@@ -1,5 +1,5 @@
 .container {
-    padding: var(--spacing-large) var(--spacing-extra-large);
+    margin: var(--spacing-extra-large);
 }
 
 .headerCardsList {
@@ -14,6 +14,7 @@
 
 .left {
     flex: 0;
+    cursor: pointer;
 }
 
 .center {
@@ -22,6 +23,7 @@
 }
 
 .right {
+    cursor: pointer;
     text-align: right;
 }
 
@@ -30,6 +32,6 @@
     flex-wrap: wrap;
     flex-direction: row;
     gap: 36px;
-    margin: var(--spacing-extra-large);
     justify-content: space-between;
+    margin-top: var(--spacing-extra-large);
 }
