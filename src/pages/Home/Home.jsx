@@ -13,7 +13,7 @@ function Home() {
                     <div className={styles.textInfo}>
                         <span>Concorra a uma</span>
                         <h1>Porsche Taycan Turbo</h1>
-                        <span className={styles.fontSmall}>Compras acima de R$ 20.000,00</span>
+                        <span className={styles.fontSmall}>A Cada 10.000 Produtos cadastrados</span>
                     </div>
                 </div>
             </div>
