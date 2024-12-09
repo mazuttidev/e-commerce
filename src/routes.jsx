@@ -3,7 +3,7 @@ import App from "./App";
 import Home from "./pages/Home/Home";
 import Products from "./pages/Products/Products";
 import ProductDetail from "./pages/ProductDetail/ProductDetails";
-// import NotFound from "./pages/NotFound";
+import NotFound from "./pages/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -26,10 +26,10 @@ const router = createBrowserRouter([
         path: "/products/create",
         element: <ProductDetail />,
       },
-      // {
-      //   path: "*",
-      //   element: <NotFound />,
-      // },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ]
   },
 ]);

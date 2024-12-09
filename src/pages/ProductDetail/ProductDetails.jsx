@@ -118,8 +118,8 @@ function ProductDetail() {
                 console.error("Erro ao criar produto:", error);
             }
         } else {
-            products = products.map((product) =>
-                product.id === parseInt(id) ? { ...product, ...product } : product
+            products = products.map((elem) =>
+                elem.id === parseInt(id) ? { ...elem, ...product } : elem
             );
             localStorage.setItem("products", JSON.stringify(products));
             console.log("Produto atualizado no Local Storage:", product);
